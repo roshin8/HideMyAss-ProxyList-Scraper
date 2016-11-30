@@ -1,24 +1,44 @@
-# This is a template for a Python scraper on morph.io (https://morph.io)
-# including some code snippets below that you should find helpful
+import urllib2, re, scraperwiki
+from bs4 import BeautifulSoup as bsoup4
 
-# import scraperwiki
-# import lxml.html
-#
-# # Read in a page
-# html = scraperwiki.scrape("http://foo.com")
-#
-# # Find something on the page using css selectors
-# root = lxml.html.fromstring(html)
-# root.cssselect("div[align='left']")
-#
-# # Write out to the sqlite database using scraperwiki library
-# scraperwiki.sqlite.save(unique_keys=['name'], data={"name": "susan", "occupation": "software developer"})
-#
-# # An arbitrary query against the database
-# scraperwiki.sql.select("* from data where 'name'='peter'")
+class_attr_regex = re.compile(r'\.(?P<class_attr>.*?){display:none}') # .g3Kd{display:none}
+PROXY_LIST_URL = 'http://proxylist.hidemyass.com/'
 
-# You don't have to do things with the ScraperWiki and lxml libraries.
-# You can use whatever libraries you want: https://morph.io/documentation/python
-# All that matters is that your final data is written to an SQLite database
-# called "data.sqlite" in the current working directory which has at least a table
-# called "data".
+handle_request = urllib2.Request(PROXY_LIST_URL)
+handle_response = urllib2.urlopen(handle_request)
+
+soup = bsoup4(handle_response.read(),'html5lib')
+
+proxy_table = soup.find('table', attrs={'class':'hma-table'})
+
+data={}
+for tr in proxy_table.tbody.find_all('tr'):
+	classes_to_exclude = []
+	ip_address_text = []
+	td_list = tr.find_all('td')
+	port = td_list[2].text.strip()
+	style_tag_list = td_list[1].style.text.strip().split('\n') # [u'.g3Kd{display:none}', u'.OlWn{display:inline}', u'.wgUC{display:none}', u'.YY3C{display:inline}']
+	for class_attr in style_tag_list:
+		class_attr_match = class_attr_regex.search(str(class_attr))
+		if class_attr_match:
+			classes_to_exclude.append(class_attr_match.group("class_attr")) # ['g3Kd','wgUC']
+
+	td_list[1].style.extract()
+	ip_address_span_list = td_list[1]
+	# Get visible IP address text
+	for item in ip_address_span_list.find_all(text=True)[1:]:
+		if item.parent.get('style') == 'display:none':
+			continue
+
+		_class = item.parent.get('class') # _class = [u'g3Kd']
+		if _class:
+			if _class[0] in classes_to_exclude: # _class[0] = u'g3Kd'
+				continue
+
+		if item.strip():
+			ip_address_text.append(item)
+
+	ip_address = ''.join(ip_address_text)
+	data[ip_address.strip()]= port
+scraperwiki.sqlite.save(unique_keys=[ip_address], data=data)
+  
