@@ -7,7 +7,7 @@ PROXY_LIST_URL = 'http://proxylist.hidemyass.com/'
 handle_request = urllib2.Request(PROXY_LIST_URL)
 handle_response = urllib2.urlopen(handle_request)
 
-soup = bsoup4(handle_response.read())
+soup = bsoup4(handle_response.read(), "lxml")
 
 proxy_table = soup.find('table', attrs={'class':'hma-table'})
 
