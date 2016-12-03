@@ -17,7 +17,7 @@ for tr in proxy_table.tbody.find_all('tr'):
 	ip_address_text = []
 	td_list = tr.find_all('td')
 	port = td_list[2].text.strip()
-	county = td_list[3].text.strip()
+	country = td_list[3].text.strip()
 	connection_type = td_list[6].text.strip()
 	anon = td_list[7].text.strip()
 	style_tag_list = td_list[1].style.text.strip().split('\n') # [u'.g3Kd{display:none}', u'.OlWn{display:inline}', u'.wgUC{display:none}', u'.YY3C{display:inline}']
