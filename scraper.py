@@ -16,6 +16,7 @@ for tr in proxy_table.tbody.find_all('tr'):
 	classes_to_exclude = []
 	ip_address_text = []
 	td_list = tr.find_all('td')
+	last_update = td_list[0].text.strip()
 	port = td_list[2].text.strip()
 	country = td_list[3].text.strip()
 	connection_type = td_list[6].text.strip()
@@ -42,5 +43,5 @@ for tr in proxy_table.tbody.find_all('tr'):
 			ip_address_text.append(item)
 
 	ip_address = ''.join(ip_address_text)
-	scraperwiki.sqlite.save(unique_keys=["IP_Address"], data={"IP_address": ip_address, "Port": port, "Country": country, "Type": connection_type, "Anon": anon})
+	scraperwiki.sqlite.save(unique_keys=["IP_Address"], data={"IP_address": ip_address, "Port": port, "Country": country, "Type": connection_type, "Anon": anon, "Last_Update": last_update})
   
