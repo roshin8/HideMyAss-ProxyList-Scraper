@@ -39,5 +39,5 @@ for tr in proxy_table.tbody.find_all('tr'):
 			ip_address_text.append(item)
 
 	ip_address = ''.join(ip_address_text)
-	scraperwiki.sqlite.save(unique_keys=["ip_address"], data={"ip_address": ip_address, "port": port})
+	scraperwiki.sqlite.save(unique_keys=["ip_address"], data={"port": port, "ip_address": ip_address})
   
