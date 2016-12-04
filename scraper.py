@@ -1,5 +1,6 @@
 import urllib2, re, scraperwiki
 from bs4 import BeautifulSoup as bsoup4
+from collections import OrderedDict
 
 class_attr_regex = re.compile(r'\.(?P<class_attr>.*?){display:none}') # .g3Kd{display:none}
 PROXY_LIST_URL = 'http://proxylist.hidemyass.com/'
@@ -43,5 +44,6 @@ for tr in proxy_table.tbody.find_all('tr'):
 			ip_address_text.append(item)
 
 	ip_address = ''.join(ip_address_text)
-	scraperwiki.sqlite.save(unique_keys=["IP_Address"], data={"IP_address": ip_address, "Port": port,  "Last_Update": last_update, "Anon": anon, "Type": connection_type,  "Country": country})
+	data = OrderedDict({"IP_address": ip_address, "Port": port,  "Last_Update": last_update, "Anon": anon, "Type": connection_type,  "Country": country})
+	scraperwiki.sqlite.save(unique_keys=["IP_Address"], data=data)
   
