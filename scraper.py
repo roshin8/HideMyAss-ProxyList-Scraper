@@ -44,6 +44,6 @@ for tr in proxy_table.tbody.find_all('tr'):
 			ip_address_text.append(item)
 
 	ip_address = ''.join(ip_address_text)
-	data = OrderedDict({"IP_address": ip_address, "Port": port,  "Last_Update": last_update, "Anon": anon, "Type": connection_type,  "Country": country})
+	data = OrderedDict([("IP_address", ip_address), ("Port", port), ("Last_Update", last_update), ("Anon", anon), ("Type", connection_type), ("Country", country)])
 	scraperwiki.sqlite.save(unique_keys=["IP_Address"], data=data)
   
