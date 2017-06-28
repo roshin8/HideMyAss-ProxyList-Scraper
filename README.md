@@ -1,5 +1,7 @@
-Hide My Ass Proxy List Scraper
+Hide My Ass Proxy List Scraper (Deprecated)
 ===========
+---
+### <span style="color:red">**Note: They've discontinued their service of providing free Proxy lists** text</span>
 
 This is a scraper that runs on [Morph.io](https://morph.io).
 Visit [HideMyAss_ProxyList_Scraper](https://morph.io/roshin8/HideMyAss_ProxyList_Scraper) to see it in action
